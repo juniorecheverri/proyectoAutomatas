@@ -1,0 +1,13 @@
+{
+"Descripcion":"Números que no tengan ceros",
+"Q":[
+	"P0", "P1"
+	],
+"alfabeto":[
+	"0", "1"
+	],
+"transiciones":[ ["P0", "0", "P1"], ["P0", "1", "P0"], ["P1", "0", "P1"], ["P1", "1", "P1"]
+	],
+"Q0":"P0",
+"F":["P0"]
+}
