@@ -4,11 +4,12 @@ class cargaArchivo():
 
     def cargarArchivo(self):
         automata = {}
-        with open('../recursos/a.json') as archivo:
+        with open('../recursos/no_ceros.json') as archivo:
             automata = json.load(archivo)
         if(not self.verificarQuintupla(automata)):
             print("Error en la definición de la quintupla")
         else:
+            automata = self.verificarCompleto(automata)
             print("Autómata cargado con éxito")
     
     def verificarQuintupla(self, automata):
@@ -44,6 +45,23 @@ class cargaArchivo():
                     print("Uso incorrecto del alfabeto")
                     return False
             return True
+        
+    def verificarCompleto(self, automata):
+        if(len(automata["Q"])*len(automata["alfabeto"]) == len(automata["transiciones"])):
+            print("El autómata es completo")
+            return automata
+        else:
+            print("Automata incompleto")
+            print("completando el automata")
+
+
+            automata["Q"].append("sumidero")
+            a_completo = self.buscarTransicion(automata)
+
+            print(a_completo)
+            return a_completo
+
+        
                 
     def buscarEstado(self, estado, lista):
         for a in lista:
@@ -56,8 +74,30 @@ class cargaArchivo():
             if (a == letra):
                 return True
         return False
-                
-            
+
+    def buscarTransicion(self, automata):
+
+        alfabeto = automata["alfabeto"]
+        estados = automata["Q"]
+        transiciones = automata["transiciones"]
+
+        encontrado = False
+        for inicial in range(len(estados)):
+            for letra in range(len(alfabeto)):
+                encontrado = False
+                for transicion in range(len(transiciones)):
+                    x=[estados[inicial],alfabeto[letra],transiciones[transicion][2]]
+                    print(x)
+                    if(transiciones[transicion] == x):
+                        print("....")
+                        print("Encontrado: ", x)
+                        encontrado = True
+                        break
+                if (not encontrado):
+                    automata["transiciones"].append([estados[inicial], letra, "sumidero"])
+                    print("llorelo mi pez")
+                    print("aaaaaaahhhh, te creas, ya te lo actualizo mi rey" )
+        return automata
     
 carga = cargaArchivo()
 carga.cargarArchivo()

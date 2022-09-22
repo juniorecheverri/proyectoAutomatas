@@ -11,7 +11,7 @@ class Automata():
         self.transiciones = []
         self.inicial: ""
         self.aceptacion: []
-
+        
     def complementoAutomata(self, estados, aceptacion):
 
         copiaEstados = estados
