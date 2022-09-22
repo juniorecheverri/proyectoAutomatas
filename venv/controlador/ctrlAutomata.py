@@ -1,6 +1,4 @@
 from collections import deque
-from modelo.Estado import *
-from modelo.Arista import *
 from copy import copy
 
 class Automata():
@@ -12,17 +10,39 @@ class Automata():
         self.inicial: ""
         self.aceptacion: []
         
-    def complementoAutomata(self, estados, aceptacion):
+    def complementoAutomata(self, automata):
+        print(automata)
 
-        copiaEstados = estados
+        estados = automata["Q"]
+        aceptacion = automata["F"]
+        nuevos_aceptacion = automata["Q"]
 
-        for i in range(len(estados)):
-            for j in range (len(aceptacion)):
-                if estados[i] == aceptacion[j]:
-                    copiaEstados.pop(estados[j])
+        for acepta in aceptacion:
+            for nuevo in estados:
+                print(acepta)
+                if (acepta == nuevo):
+                    posEstado = nuevos_aceptacion.index(acepta)
+                    nuevos_aceptacion.pop(posEstado)
 
-        aceptacion = copiaEstados
-        return aceptacion
-
-    def inversoAutomata(self, listaEstados, alfabeto, transiciones, inicial, aceptacion):
+        automata["F"] = nuevos_aceptacion
+        print("Complemento del automata:")
+        print(automata)
         
+        return automata
+
+    def reversoAutomata(self, automata):
+
+        print(automata)
+        reverso = copy(automata)
+        reverso["transiciones"]=[]
+        transiciones = automata["transiciones"]
+        nuevasTransiciones = []
+        
+        for transicion in transiciones:
+            reverso["transiciones"].append([transicion[2], transicion[1], transicion[0]])
+
+
+        print("reverso del automata:")
+        print(reverso)
+
+        return reverso

@@ -1,4 +1,6 @@
 import json
+import time
+from controlador.ctrlAutomata import *
 
 class cargaArchivo():
 
@@ -11,6 +13,7 @@ class cargaArchivo():
         else:
             automata = self.verificarCompleto(automata)
             print("Autómata cargado con éxito")
+            self.main(automata)
     
     def verificarQuintupla(self, automata):
         if(not automata["Q0"] and automata["Q0"] == ""):
@@ -53,10 +56,10 @@ class cargaArchivo():
         else:
             print("Automata incompleto")
             print("completando el automata")
-
+            time.sleep(3)
 
             automata["Q"].append("sumidero")
-            a_completo = self.buscarTransicion(automata)
+            a_completo = self.buscarYcompletar(automata)
 
             print(a_completo)
             return a_completo
@@ -75,8 +78,8 @@ class cargaArchivo():
                 return True
         return False
 
-    def buscarTransicion(self, automata):
-
+    def buscarYcompletar(self, automata):
+    #Función para completar un automata
         alfabeto = automata["alfabeto"]
         estados = automata["Q"]
         transiciones = automata["transiciones"]
@@ -98,6 +101,22 @@ class cargaArchivo():
                     print("llorelo mi pez")
                     print("aaaaaaahhhh, te creas, ya te lo actualizo mi rey" )
         return automata
+
+    def main(self, automata):
+        ctrl = Automata()
+        print("LISTA DE OPCIONES")
+
+        opcion = int(input("--------------------------\n"
+                    "Selecciona una opcion:\n"
+                    "0. SALIR\n"
+                    "1. Hallar complemento\n"
+                    "2. Hallar reverso\n"
+                    "--------------------------\n"))
+        if (opcion == 1):  # complemento
+            ctrl.complementoAutomata(automata)
+
+        elif (opcion == 2):  # reverso
+            ctrl.reversoAutomata(automata)
     
 carga = cargaArchivo()
 carga.cargarArchivo()
