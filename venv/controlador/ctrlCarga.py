@@ -1,6 +1,7 @@
 import json
 import time
 from controlador.ctrlAutomata import *
+from controlador.ctrlGraficas import Grafica
 
 class cargaArchivo():
 
@@ -13,7 +14,8 @@ class cargaArchivo():
         else:
             automata = self.verificarCompleto(automata)
             print("Autómata cargado con éxito")
-            self.main(automata)
+            return self.main(automata)
+        return automata
     
     def verificarQuintupla(self, automata):
         if(not automata["Q0"] and automata["Q0"] == ""):
@@ -104,19 +106,28 @@ class cargaArchivo():
 
     def main(self, automata):
         ctrl = Automata()
+        grafica = Grafica()
         print("LISTA DE OPCIONES")
 
         opcion = int(input("--------------------------\n"
                     "Selecciona una opcion:\n"
                     "0. SALIR\n"
-                    "1. Hallar complemento\n"
-                    "2. Hallar reverso\n"
+                    "1. Graficar\n"
+                    "2. Hallar complemento\n"
+                    "3. Hallar reverso\n"
                     "--------------------------\n"))
         if (opcion == 1):  # complemento
-            ctrl.complementoAutomata(automata)
 
-        elif (opcion == 2):  # reverso
-            ctrl.reversoAutomata(automata)
-    
+            grafica.pintar(automata)
+
+        if (opcion == 2):  # complemento
+            return ctrl.complementoAutomata(automata)
+
+        elif (opcion == 3):  # reverso
+            return ctrl.reversoAutomata(automata)
+        elif (opcion == 0):  # reverso
+            return automata
+        return automata
+
 carga = cargaArchivo()
 carga.cargarArchivo()
