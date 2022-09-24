@@ -119,6 +119,7 @@ class cargaArchivo():
                     "2. Hallar complemento\n"
                     "3. Hallar reverso\n"
                     "4. Unir automatas\n"
+                    "5. Hacer interseccion entre automatas\n"
                     "--------------------------\n"))
         if (opcion == 1):  # complemento
 
@@ -133,6 +134,8 @@ class cargaArchivo():
             return automata1
         elif (opcion == 4):  # reverso
             return ctrl.unionAutomatas(automata1, automata2)
+        elif (opcion == 5):  # reverso
+            return ctrl.interseccionAutomatas(automata1, automata2)
         return automata1
 
 carga = cargaArchivo()

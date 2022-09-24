@@ -118,4 +118,42 @@ class Automata():
         print(nuevoAutomata)
         return nuevoAutomata
 
+    def interseccionAutomatas(self, automata1, automata2):
+        nuevoAutomata = {
+                "Descripcion":"Union de 2 automatas",
+                "Q":[],
+                "alfabeto":[set(automata1["alfabeto"] + automata2["alfabeto"])],
+                "transiciones":[],
+                "Q0":"",
+                "F":[]
+                }
+        encontrado = False
+        for estadosPrimero in automata1["Q"]:   #ciclos para crear la combinacion de estados
+            for estadosSegundo in automata2["Q"]:
+                encontrado = False
+                for estadoNuevos in nuevoAutomata["Q"]: #verifica la lista de estados nuevos
+                    aux = estadosSegundo+estadosPrimero # en busca de que no exista un estado
+                    if estadoNuevos == aux:             #con el mismo nombre pero inveritido
+                        encontrado = True
+                        break
+                if not encontrado:  #Si no lo encuentra
+
+                    nuevoAutomata["Q"].append(estadosPrimero + estadosSegundo) #agregue el nuevo estado a la lista de estados
+                    if estadosPrimero == automata1["Q0"] and estadosSegundo == automata2["Q0"]:
+                        nuevoAutomata["Q0"] = (estadosPrimero + estadosSegundo) #Agrega el estado de aceptacion si el nuevo estado es la combinacion de estados iniciales del primer automata y del segundo
+                    for finales1 in automata1["F"]:
+                        for finales2 in automata2["F"]:
+                            if finales1 == estadosPrimero and finales2 == estadosSegundo:
+                                nuevoAutomata["F"].append(estadosPrimero + estadosSegundo)
+        #----------------------------------------
+        for estadosP in automata1["Q"]:  # ciclos para crear la combinacion de estados
+            for estadosS in automata2["Q"]:
+                for transicion2 in automata2["transiciones"]:  # verifica las transiciones del primer automata
+                    for transicion1 in automata1["transiciones"]:  # verifica las transiciones del primer automata
+                        if transicion1[0] == estadosP and transicion2[0] == estadosS and transicion1[1] == transicion2[1]:  # con el mismo nombre pero inveritido
+                            nuevoAutomata["transiciones"].append([estadosP + estadosS, transicion1[1], transicion1[2] + transicion2[2]])
+
+        print(nuevoAutomata)
+        return nuevoAutomata
+
 
