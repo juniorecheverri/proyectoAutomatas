@@ -8,13 +8,15 @@ class cargaArchivo():
     def cargarArchivo(self):
         automata = {}
         with open('../recursos/no_ceros.json') as archivo:
-            automata = json.load(archivo)
-        if(not self.verificarQuintupla(automata)):
+            automata1 = json.load(archivo)
+        with open('../recursos/impares.json') as archivo:
+            automata2 = json.load(archivo)
+        if(not self.verificarQuintupla(automata1)):
             print("Error en la definición de la quintupla")
         else:
-            automata = self.verificarCompleto(automata)
+            automata = self.verificarCompleto(automata1)
             print("Autómata cargado con éxito")
-            return self.main(automata)
+            return self.main(automata, automata2)
         return automata
     
     def verificarQuintupla(self, automata):
@@ -82,6 +84,7 @@ class cargaArchivo():
 
     def buscarYcompletar(self, automata):
     #Función para completar un automata
+        completo = copy(automata)
         alfabeto = automata["alfabeto"]
         estados = automata["Q"]
         transiciones = automata["transiciones"]
@@ -99,12 +102,12 @@ class cargaArchivo():
                         encontrado = True
                         break
                 if (not encontrado):
-                    automata["transiciones"].append([estados[inicial], letra, "sumidero"])
+                    completo["transiciones"].append([estados[inicial], letra, "sumidero"])
                     print("llorelo mi pez")
                     print("aaaaaaahhhh, te creas, ya te lo actualizo mi rey" )
-        return automata
+        return completo
 
-    def main(self, automata):
+    def main(self, automata1, automata2):
         ctrl = Automata()
         grafica = Grafica()
         print("LISTA DE OPCIONES")
@@ -115,19 +118,22 @@ class cargaArchivo():
                     "1. Graficar\n"
                     "2. Hallar complemento\n"
                     "3. Hallar reverso\n"
+                    "4. Unir automatas\n"
                     "--------------------------\n"))
         if (opcion == 1):  # complemento
 
-            grafica.pintar(automata)
+            grafica.pintar(automata1)
 
-        if (opcion == 2):  # complemento
-            return ctrl.complementoAutomata(automata)
+        elif (opcion == 2):  # complemento
+            return ctrl.complementoAutomata(automata1)
 
         elif (opcion == 3):  # reverso
-            return ctrl.reversoAutomata(automata)
+            return ctrl.reversoAutomata(automata1)
         elif (opcion == 0):  # reverso
-            return automata
-        return automata
+            return automata1
+        elif (opcion == 4):  # reverso
+            return ctrl.unionAutomatas(automata1, automata2)
+        return automata1
 
 carga = cargaArchivo()
 carga.cargarArchivo()

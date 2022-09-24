@@ -29,49 +29,6 @@ class Automata():
         print(automata)
         
         return automata
-    
-    def reverso2(self,automata):
-        automata1 = self.cambiarDireciones(automata)
-        self.getSumidero(automata1)
-        sumideros = self.getSumidero(automata1)
-        print(sumideros)
-    
-    def cambiarDireciones(self,automata):
-        print(automata)
-        reverso = copy(automata)
-        reverso["transiciones"] = []
-        transiciones = automata["transiciones"]
-        estados = reverso["Q"]
-
-        for transicion in transiciones:
-            reverso["transiciones"].append([transicion[2], transicion[1], transicion[0]])
-
-        return reverso
-    
-    def getSumidero(self,automata):
-        estados = automata["Q"]
-        transiciones = automata["transiciones"]
-        count = 0
-        count2 = 0
-        sumideros = []
-        for estado in estados:
-            for trasicion in transiciones:
-                if(estado == trasicion[2]):
-                    if(trasicion[0] == estado):
-                        count +=1
-                    count2 +=1
-            if(count <= 2):
-                conut3 = count +count2
-                if(conut3 > 2):
-                    return None
-                else:
-                    sumideros.append(estado)
-                    return sumideros
-        return  None
-
-        
-        print(transiciones)
-        
 
     def reversoAutomata(self, automata):
         print(automata)
@@ -86,28 +43,79 @@ class Automata():
         print("reverso del automata:")
 
         print(reverso)
-        transicionesReverso = reverso["transiciones"]
+        transicionesReverso1 = copy(reverso["transiciones"])
+        transicionesReverso2 = copy(reverso["transiciones"])
         encontrado = False
         estadosReverso = reverso["Q"]
-        for estado in estados:
-            print(estado)
-            encontrado = False
-            for transicion in transicionesReverso:
-                if transicion[2] == estado and transicion[0] != estado:
-                    x = [transicion[0], transicion[1], estado]
-                    if (transicion == x):
-                        print("....")
-                        print(x)
-                        print("No es sumiedero: ", estado)
-                        encontrado = True
-                        break
-            if (not encontrado):
-                for e in estados:
-                    if e == estado:
-                        estadosReverso.pop(estadosReverso.index(e))
+
+        for rep in range(2):
+            for estado in estados:
+                encontrado = False
+                for transicion in transicionesReverso1:
+                    if transicion[2] == estado and transicion[0] != estado:
+                        x = [transicion[0], transicion[1], estado]
+                        if (transicion == x):
+                            print("....")
+                            print(x)
+                            print("No es sumiedero: ", estado)
+                            encontrado = True
+                            break
+
+                if not encontrado:
+                    print("estado inalcanzable: ", estado)
+                    for t in transicionesReverso1:
+                        if t[0] == estado or t[2] == estado:
+                            print(t)
+                            print("___________")
+                            transicionesReverso2.pop(transicionesReverso2.index(t))
+                    for e in estados:
+                        if e == estado:
+                            estadosReverso.pop(estadosReverso.index(e))
+
+                reverso["transiciones"] = transicionesReverso2
+                transicionesReverso1 = copy(transicionesReverso2)
 
 
 
         print("reverso completo")
         print(reverso)
+
+    def unionAutomatas(self, automata1, automata2):
+        nuevoAutomata = {
+                "Descripcion":"Union de 2 automatas",
+                "Q":[],
+                "alfabeto":[set(automata1["alfabeto"] + automata2["alfabeto"])],
+                "transiciones":[],
+                "Q0":"",
+                "F":[]
+                }
+        encontrado = False
+        for estadosPrimero in automata1["Q"]:   #ciclos para crear la combinacion de estados
+            for estadosSegundo in automata2["Q"]:
+                encontrado = False
+                for estadoNuevos in nuevoAutomata["Q"]: #verifica la lista de estados nuevos
+                    aux = estadosSegundo+estadosPrimero # en busca de que no exista un estado
+                    if estadoNuevos == aux:             #con el mismo nombre pero inveritido
+                        encontrado = True
+                        break
+                if not encontrado:  #Si no lo encuentra
+
+                    nuevoAutomata["Q"].append(estadosPrimero + estadosSegundo) #agregue el nuevo estado a la lista de estados
+                    if estadosPrimero == automata1["Q0"] and estadosSegundo == automata2["Q0"]:
+                        nuevoAutomata["Q0"] = (estadosPrimero + estadosSegundo) #Agrega el estado de aceptacion si el nuevo estado es la combinacion de estados iniciales del primer automata y del segundo
+                    for finales1 in automata1["F"]:
+                        for finales2 in automata2["F"]:
+                            if finales1 == estadosPrimero or finales2 == estadosSegundo:
+                                nuevoAutomata["F"].append(estadosPrimero + estadosSegundo)
+        #----------------------------------------
+        for estadosP in automata1["Q"]:  # ciclos para crear la combinacion de estados
+            for estadosS in automata2["Q"]:
+                for transicion2 in automata2["transiciones"]:  # verifica las transiciones del primer automata
+                    for transicion1 in automata1["transiciones"]:  # verifica las transiciones del primer automata
+                        if transicion1[0] == estadosP and transicion2[0] == estadosS and transicion1[1] == transicion2[1]:  # con el mismo nombre pero inveritido
+                            nuevoAutomata["transiciones"].append([estadosP + estadosS, transicion1[1], transicion1[2] + transicion2[2]])
+
+        print(nuevoAutomata)
+        return nuevoAutomata
+
 
