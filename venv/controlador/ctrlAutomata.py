@@ -79,6 +79,7 @@ class Automata():
 
         print("reverso completo")
         print(reverso)
+        return reverso
 
     def unionAutomatas(self, automata1, automata2):
         nuevoAutomata = {

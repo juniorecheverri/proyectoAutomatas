@@ -1,8 +1,6 @@
 from controlador.ctrlAutomata import *
-from controlador.ctrlGraficas import Grafica
+from controlador.ctrlGraficas import *
 import json
-import time
-
 
 class cargaArchivo():
 
@@ -17,8 +15,10 @@ class cargaArchivo():
         else:
             automata = self.verificarCompleto(automata1)
             print("Autómata cargado con éxito")
-            return self.main(automata, automata2)
-        return automata
+            automataResultante = self.main(automata, automata2)
+            grafica =  Grafica()
+            grafica.graficar(automataResultante)
+
     
     def verificarQuintupla(self, automata):
         if(not automata["Q0"] and automata["Q0"] == ""):
@@ -61,7 +61,7 @@ class cargaArchivo():
         else:
             print("Automata incompleto")
             print("completando el automata")
-            time.sleep(3)
+            
 
             automata["Q"].append("sumidero")
             a_completo = self.buscarYcompletar(automata)
@@ -123,9 +123,18 @@ class cargaArchivo():
                     "5. Hacer interseccion entre automatas\n"
                     "--------------------------\n"))
         if (opcion == 1):  # complemento
-
-          #  grafica.pintar(automata1)
-          return;
+            grafica = Grafica()
+            input("################## ELIJA EL AUTOMATA #################")
+            input("1. {0} ".format(automata1["Descripcion"]))
+            input("2. {0} ".format(automata2["Descripcion"]))
+            i = int(input("Eleccion: "))
+            if(i == 1):
+                grafica.graficar(automata1)
+            elif(i == 2):
+                grafica.graficar(automata2)
+            else:
+                print("Opcion no disponible")
+                self.main(automata1,automata2)
 
         elif (opcion == 2):  # complemento
             return ctrl.complementoAutomata(automata1)
