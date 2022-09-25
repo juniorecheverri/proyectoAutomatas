@@ -1,43 +1,36 @@
-import  pygame,sys
+import networkx as nx
+import matplotlib.pyplot as plt
 
-class Grafica():
-    
-    def pintar(self,automata):
-        pygame.init()
 
-        color = (60, 226, 231)
-        negro = (3, 3, 3)
-        size = (900, 700)
-        estados = self.getEstados(automata)
+# https://networkx.org/documentation/stable/reference/classes/generated/networkx.DiGraph.add_edge.html?highlight=add_edge#networkx.DiGraph.add_edge
+# Note: The nodes u and v will be automatically added if they are not already in the graph.
+def agregar_arista(G, u, v, w=1, di=True):
+    G.add_edge(u, v, weight=w)
 
-        # Crear ventana
-        ventana = pygame.display.set_mode(size)
+    # Si el grafo no es dirigido
+    if not di:
+        # Agrego otra arista en sentido contrario
+        G.add_edge(v, u, weight=w)
 
-        while True:
-            for evet in pygame.event.get():
-                if evet.type == pygame.QUIT:
-                    sys.exit()
-            # pitar color de fondo
-            ventana.fill(color)
 
-            # ---------- Zona de pintar------------
-            for estado in estados:
-                font = pygame.font.SysFont("Arial", 16)
-                pygame.draw.circle(ventana, negro,estado["coordenadas"], 40, 2)
-                text = font.render(estado["nombre"], True, negro)
-                ventana.blit(text, [(estado["coordenadas"][0]-20), (estado["coordenadas"][1] - 10)])
+if __name__ == '__main__':
+    # Instantiate the DiGraph
+    G = nx.DiGraph()
 
-            # actualizar fondo
-            pygame.display.flip()
+    # Add node/edge pairs
+    agregar_arista(G, "A", "G", 5)
+    agregar_arista(G, "A", "A", 10)
+    agregar_arista(G, "B", "A", "z")
+    agregar_arista(G, "G", "A", "W,5")
 
-    def getEstados(self,automata):
-        estados = automata["Q"]
-        EstadosCoordenada = []
-        i = 0
-        for e in estados:
-            i+=1
-            EstadosCoordenada.append({"nombre":e,"coordenadas":[(110*i),(110*i)]})
 
-        return EstadosCoordenada
+
+    # Draw the netwo
+    pos = nx.layout.planar_layout(G)
+    nx.draw_networkx(G, pos)
+    labels = nx.get_edge_attributes(G, 'weight')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+    plt.title("Grafo con NetworkX")
+    plt.show()
 
 

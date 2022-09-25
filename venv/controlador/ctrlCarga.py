@@ -1,7 +1,8 @@
-import json
-import time
 from controlador.ctrlAutomata import *
 from controlador.ctrlGraficas import Grafica
+import json
+import time
+
 
 class cargaArchivo():
 
@@ -109,7 +110,7 @@ class cargaArchivo():
 
     def main(self, automata1, automata2):
         ctrl = Automata()
-        grafica = Grafica()
+      #  grafica = Grafica()
         print("LISTA DE OPCIONES")
 
         opcion = int(input("--------------------------\n"
@@ -123,7 +124,8 @@ class cargaArchivo():
                     "--------------------------\n"))
         if (opcion == 1):  # complemento
 
-            grafica.pintar(automata1)
+          #  grafica.pintar(automata1)
+          return;
 
         elif (opcion == 2):  # complemento
             return ctrl.complementoAutomata(automata1)
