@@ -140,7 +140,7 @@ class cargaArchivo():
             return ctrl.complementoAutomata(automata1)
 
         elif (opcion == 3):  # reverso
-            return ctrl.reversoAutomata(automata1)
+            return ctrl.reversoAutomata(automata2)
         elif (opcion == 0):  # reverso
             return automata1
         elif (opcion == 4):  # reverso

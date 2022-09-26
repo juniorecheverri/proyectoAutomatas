@@ -32,53 +32,12 @@ class Automata():
 
     def reversoAutomata(self, automata):
         print(automata)
-        reverso = copy(automata)
-        reverso["transiciones"] = []
-        transiciones = automata["transiciones"]
-        estados = reverso["Q"]
+        reverso = {}
 
-        for transicion in transiciones:
-            reverso["transiciones"].append([transicion[2], transicion[1], transicion[0]])
+        if len(automata["F"])==1:
+            reverso = self.invertirAutomata(automata)
+            return reverso
 
-        print("reverso del automata:")
-
-        print(reverso)
-        transicionesReverso1 = copy(reverso["transiciones"])
-        transicionesReverso2 = copy(reverso["transiciones"])
-        encontrado = False
-        estadosReverso = reverso["Q"]
-
-        for rep in range(2):
-            for estado in estados:
-                encontrado = False
-                for transicion in transicionesReverso1:
-                    if transicion[2] == estado and transicion[0] != estado:
-                        x = [transicion[0], transicion[1], estado]
-                        if (transicion == x):
-                            print("....")
-                            print(x)
-                            print("No es sumiedero: ", estado)
-                            encontrado = True
-                            break
-
-                if not encontrado:
-                    print("estado inalcanzable: ", estado)
-                    for t in transicionesReverso1:
-                        if t[0] == estado or t[2] == estado:
-                            print(t)
-                            print("___________")
-                            transicionesReverso2.pop(transicionesReverso2.index(t))
-                    for e in estados:
-                        if e == estado:
-                            estadosReverso.pop(estadosReverso.index(e))
-
-                reverso["transiciones"] = transicionesReverso2
-                transicionesReverso1 = copy(transicionesReverso2)
-
-
-
-        print("reverso completo")
-        print(reverso)
         return reverso
 
     def unionAutomatas(self, automata1, automata2):
@@ -157,4 +116,29 @@ class Automata():
         print(nuevoAutomata)
         return nuevoAutomata
 
+    def reversoAutomata(self, automata):
+        print(automata)
+        reverso = {}
 
+        if len(automata["F"]) == 1:
+            reverso = self.invertirAutomata(automata)
+            return reverso
+
+        return reverso
+
+    def invertirAutomata(self, automata):
+
+        reverso = copy(automata)
+        reverso["transiciones"] = []
+        reverso["F"] = []
+
+        for transicion in automata["transiciones"]:
+            reverso["transiciones"].append([transicion[2], transicion[1], transicion[0]])
+
+        copiaAceptacion = automata["F"]
+        copiaInicial = automata["Q0"]
+
+        reverso["Q0"] = copiaAceptacion[0]
+        reverso["F"].append(copiaInicial)
+
+        return reverso
