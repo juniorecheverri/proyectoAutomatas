@@ -1,5 +1,6 @@
 from collections import deque
 from copy import copy
+import time
 
 class Automata():
 
@@ -123,14 +124,27 @@ class Automata():
         if len(automata["F"]) == 1:
             reverso = self.invertirAutomata(automata)
             return reverso
-
+        else:
+            automata["Q"].append("auxiliar")
+            for estado in automata["Q"]:
+                for aceptacion in automata["F"]:
+                    if estado == aceptacion:
+                        automata["transiciones"].append([estado, "lamda", "auxiliar"])
+            automata["F"] = ["auxiliar"]
+            reverso = self.invertirAutomata(automata)
+            return reverso
         return reverso
 
     def invertirAutomata(self, automata):
 
-        reverso = copy(automata)
-        reverso["transiciones"] = []
-        reverso["F"] = []
+        reverso = {"Descripcion":"Inverso del automata",
+                "Q":[],
+                "alfabeto":[],
+                "transiciones":[],
+                "Q0":"",
+                "F":[]}
+        reverso["Q"] = automata["Q"]
+        reverso["alfabeto"] = automata["alfabeto"]
 
         for transicion in automata["transiciones"]:
             reverso["transiciones"].append([transicion[2], transicion[1], transicion[0]])
@@ -140,5 +154,9 @@ class Automata():
 
         reverso["Q0"] = copiaAceptacion[0]
         reverso["F"].append(copiaInicial)
+
+        print("Revirtiendo el automata")
+        time.sleep(1)
+        print(reverso)
 
         return reverso
