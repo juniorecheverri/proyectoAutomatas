@@ -4,20 +4,25 @@ import json
 
 class cargaArchivo():
 
-    def cargarArchivo(self):
+    def __init__(self,*args):
+        if len(args)<2:
+            self.automata1 =self.cargarArchivo(args[0])
+        elif len(args) >= 2:
+            self.automata1 = self.cargarArchivo(args[0])
+            self.automata2 = self.cargarArchivo(args[1])
+
+
+    def cargarArchivo(self,ruta):
         automata = {}
-        with open('../recursos/no_ceros.json') as archivo:
-            automata1 = json.load(archivo)
-        with open('../recursos/impares.json') as archivo:
-            automata2 = json.load(archivo)
-        if(not self.verificarQuintupla(automata1)):
-            print("Error en la definición de la quintupla")
-        else:
-            automata = self.verificarCompleto(automata1)
-            print("Autómata cargado con éxito")
-            automataResultante = self.main(automata, automata2)
-            grafica =  Grafica()
-            grafica.graficar(automataResultante)
+        if ruta != None:
+            with open(ruta) as archivo:
+                automata= json.load(archivo)
+            if(not self.verificarQuintupla(automata)):
+                print("Error en la definición de la quintupla")
+            else:
+                auto = self.verificarCompleto(automata)
+                return auto
+        return automata
 
     
     def verificarQuintupla(self, automata):
@@ -108,46 +113,5 @@ class cargaArchivo():
                     print("aaaaaaahhhh, te creas, ya te lo actualizo mi rey" )
         return completo
 
-    def main(self, automata1, automata2):
-        ctrl = Automata()
-      #  grafica = Grafica()
-        print("LISTA DE OPCIONES")
 
-        opcion = int(input("--------------------------\n"
-                    "Selecciona una opcion:\n"
-                    "0. SALIR\n"
-                    "1. Graficar\n"
-                    "2. Hallar complemento\n"
-                    "3. Hallar reverso\n"
-                    "4. Unir automatas\n"
-                    "5. Hacer interseccion entre automatas\n"
-                    "--------------------------\n"))
-        if (opcion == 1):  # complemento
-            grafica = Grafica()
-            input("################## ELIJA EL AUTOMATA #################")
-            input("1. {0} ".format(automata1["Descripcion"]))
-            input("2. {0} ".format(automata2["Descripcion"]))
-            i = int(input("Eleccion: "))
-            if(i == 1):
-                grafica.graficar(automata1)
-            elif(i == 2):
-                grafica.graficar(automata2)
-            else:
-                print("Opcion no disponible")
-                self.main(automata1,automata2)
 
-        elif (opcion == 2):  # complemento
-            return ctrl.complementoAutomata(automata1)
-
-        elif (opcion == 3):  # reverso
-            return ctrl.reversoAutomata(automata2)
-        elif (opcion == 0):  # reverso
-            return automata1
-        elif (opcion == 4):  # reverso
-            return ctrl.unionAutomatas(automata1, automata2)
-        elif (opcion == 5):  # reverso
-            return ctrl.interseccionAutomatas(automata1, automata2)
-        return automata1
-
-carga = cargaArchivo()
-carga.cargarArchivo()

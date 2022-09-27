@@ -4,13 +4,6 @@ import time
 
 class Automata():
 
-    def __init__(self):
-        self.ListaEstados = []
-        self.alfabeto = []
-        self.transiciones = []
-        self.inicial: ""
-        self.aceptacion: []
-        
     def complementoAutomata(self, automata):
         print(automata)
 
@@ -81,7 +74,7 @@ class Automata():
 
     def interseccionAutomatas(self, automata1, automata2):
         nuevoAutomata = {
-                "Descripcion":"Union de 2 automatas",
+                "Descripcion":"Interseccion de 2 automatas",
                 "Q":[],
                 "alfabeto":[set(automata1["alfabeto"] + automata2["alfabeto"])],
                 "transiciones":[],
